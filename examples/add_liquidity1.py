@@ -16,14 +16,14 @@ client = HybridswapTestnetClient(user_address=account['address'])
 # By default all subsequent operations are on behalf of user_address
 
 # Fetch our two assets of interest
-HYBRIDUSDC = client.fetch_asset(21582668)
+TINYUSDC = client.fetch_asset(21582668)
 ALGO = client.fetch_asset(0)
 
 # Fetch the pool we will work with
-pool = client.fetch_pool(HYBRIDUSDC, ALGO)
+pool = client.fetch_pool(TINYUSDC, ALGO)
 
-# Get a quote for supplying 1000.0 HybridUSDC
-quote = pool.fetch_mint_quote(HYBRIDUSDC(1000_000_000), slippage=0.01)
+# Get a quote for supplying 1000.0 TinyUSDC
+quote = pool.fetch_mint_quote(TINYUSDC(1000_000_000), slippage=0.01)
 
 print(quote)
 
@@ -47,5 +47,5 @@ if quote.amounts_in[ALGO] < 5_000_000:
 info = pool.fetch_pool_position()
 share = info['share'] * 100
 print(f'Pool Tokens: {info[pool.liquidity_asset]}')
-print(f'Assets: {info[HYBRIDUSDC]}, {info[ALGO]}')
+print(f'Assets: {info[TINYUSDC]}, {info[ALGO]}')
 print(f'Share of pool: {share:.3f}%')

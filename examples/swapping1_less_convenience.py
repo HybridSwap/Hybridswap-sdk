@@ -41,20 +41,20 @@ if(not client.is_opted_in(account['address'])):
 
 
 # Fetch our two assets of interest
-HYBRIDUSDC = Asset(id=21582668, name='HybridUSDC', unit_name='HYBRIDUSDC', decimals=6)
+TINYUSDC = Asset(id=21582668, name='TinyUSDC', unit_name='TINYUSDC', decimals=6)
 ALGO = Asset(id=0, name='Algo', unit_name='ALGO', decimals=6)
 
 # Create the pool we will work with and fetch its on-chain state
-pool = Pool(client, asset_a=HYBRIDUSDC, asset_b=ALGO, fetch=True)
+pool = Pool(client, asset_a=TINYUSDC, asset_b=ALGO, fetch=True)
 
 
-# Get a quote for a swap of 1 ALGO to HYBRIDUSDC with 1% slippage tolerance
+# Get a quote for a swap of 1 ALGO to TINYUSDC with 1% slippage tolerance
 quote = pool.fetch_fixed_input_swap_quote(ALGO(1_000_000), slippage=0.01)
 print(quote)
-print(f'HYBRIDUSDC per ALGO: {quote.price}')
-print(f'HYBRIDUSDC per ALGO (worst case): {quote.price_with_slippage}')
+print(f'TINYUSDC per ALGO: {quote.price}')
+print(f'TINYUSDC per ALGO (worst case): {quote.price_with_slippage}')
 
-# We only want to sell if ALGO is > 180 HYBRIDUSDC (It's testnet!)
+# We only want to sell if ALGO is > 180 TINYUSDC (It's testnet!)
 if quote.price_with_slippage > 180:
     print(f'Swapping {quote.amount_in} to {quote.amount_out_with_slippage}')
     # Prepare a transaction group
@@ -73,10 +73,10 @@ if quote.price_with_slippage > 180:
 
     # Check if any excess remaining after the swap
     excess = pool.fetch_excess_amounts(account['address'])
-    if HYBRIDUSDC.id in excess:
-        amount = excess[HYBRIDUSDC.id]
+    if TINYUSDC.id in excess:
+        amount = excess[TINYUSDC.id]
         print(f'Excess: {amount}')
-        # We might just let the excess accumulate rather than redeeming if its < 1 HybridUSDC
+        # We might just let the excess accumulate rather than redeeming if its < 1 TinyUSDC
         if amount > 1_000_000:
             transaction_group = pool.prepare_redeem_transactions(amount, account['address'])
             # Sign the group with our key
